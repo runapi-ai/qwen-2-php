@@ -1,0 +1,49 @@
+{
+  "name": "runapi-ai/qwen-2",
+  "description": "RunAPI Qwen 2 Composer package for PHP applications",
+  "type": "library",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "RunAPI",
+      "email": "contact@runapi.ai"
+    }
+  ],
+  "require": {
+    "php": ">=8.2",
+    "runapi-ai/core": "^0.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "RunApi\\Qwen2\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "RunApi\\Qwen2\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-main": "0.1.x-dev"
+    }
+  },
+  "minimum-stability": "stable",
+  "homepage": "https://runapi.ai/models/qwen-2",
+  "support": {
+    "source": "https://github.com/runapi-ai/qwen-2-php",
+    "docs": "https://runapi.ai/docs#sdk-qwen-2",
+    "issues": "https://github.com/runapi-ai/qwen-2-php/issues"
+  },
+  "keywords": [
+    "runapi",
+    "runapi-ai",
+    "php",
+    "composer",
+    "sdk",
+    "api",
+    "packagist",
+    "qwen-2",
+    "qwen-2-api"
+  ]
+}
