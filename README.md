@@ -46,8 +46,8 @@ All SDK exceptions inherit from `RunApi\Core\Errors\RunApiException`, including 
 ## Links
 
 - Model page: https://runapi.ai/models/qwen-2
-- SDK docs: https://runapi.ai/docs#sdk-qwen-2
-- Product docs: https://runapi.ai/docs#qwen-2
+- SDK docs: https://runapi.ai/docs/resources/sdks
+- Product docs: https://runapi.ai/docs/api/qwen-2/text-to-image
 - Pricing and rate limits: https://runapi.ai/models/qwen-2/text-to-image
 - Full catalog: https://runapi.ai/models
 - GitHub repository: https://github.com/runapi-ai/qwen-2-php
