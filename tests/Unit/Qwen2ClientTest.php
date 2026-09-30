@@ -12,7 +12,6 @@ use RunApi\Core\Tests\Fixtures\QueueHttpClient;
 use RunApi\Qwen2\Models\CompletedImageTaskResponse;
 use RunApi\Qwen2\Qwen2Client;
 use RunApi\Qwen2\Resources\EditImage;
-use RunApi\Qwen2\Resources\RemixImage;
 use RunApi\Qwen2\Resources\TextToImage;
 
 final class Qwen2ClientTest extends TestCase
@@ -22,23 +21,20 @@ final class Qwen2ClientTest extends TestCase
         $client = new Qwen2Client(new ClientOptions(apiKey: 'k', httpClient: new QueueHttpClient([]), maxRetries: 0));
 
         self::assertInstanceOf(TextToImage::class, $client->textToImage);
-        self::assertInstanceOf(RemixImage::class, $client->remixImage);
         self::assertInstanceOf(EditImage::class, $client->editImage);
     }
 
     public function testCreatePostsCompactedBodyToCorrectPath(): void
     {
         $transport = new QueueHttpClient([
-            new Response(200, [], '{"id":"task_1"}'),
-        ]);
+            new Response(200, [], '{"id":"task_1"}')]);
         $client = new Qwen2Client(new ClientOptions(apiKey: 'k', httpClient: $transport, maxRetries: 0));
 
         $task = $client->textToImage->create([
             'model' => 'qwen-2-text-to-image',
             'prompt' => 'A product render',
             'callback_url' => '',
-            'seed' => null,
-        ]);
+            'seed' => null]);
 
         $body = json_decode((string) $transport->requests[0]->getBody(), true, flags: JSON_THROW_ON_ERROR);
 
@@ -53,14 +49,12 @@ final class Qwen2ClientTest extends TestCase
     {
         $transport = new QueueHttpClient([
             new Response(200, [], '{"id":"task_1"}'),
-            new Response(200, [], '{"id":"task_1","status":"completed","images":[{"url":"https://file.runapi.ai/result"}],"extra_field":"kept"}'),
-        ]);
+            new Response(200, [], '{"id":"task_1","status":"completed","images":[{"url":"https://file.runapi.ai/result"}],"extra_field":"kept","usage":{"cost":0.05}}')]);
         $client = new Qwen2Client(new ClientOptions(apiKey: 'k', httpClient: $transport, maxRetries: 0));
 
         $result = $client->textToImage->run([
             'model' => 'qwen-2-text-to-image',
-            'prompt' => 'A product render',
-        ]);
+            'prompt' => 'A product render']);
 
         self::assertInstanceOf(CompletedImageTaskResponse::class, $result);
         self::assertSame('https://file.runapi.ai/result', $result->images[0]->url);
@@ -72,8 +66,7 @@ final class Qwen2ClientTest extends TestCase
     {
         $transport = new QueueHttpClient([
             new Response(200, [], '{"id":"task_1"}'),
-            new Response(200, [], '{"id":"task_1","status":"completed"}'),
-        ]);
+            new Response(200, [], '{"id":"task_1","status":"completed","usage":{"cost":0.05}}')]);
         $client = new Qwen2Client(new ClientOptions(apiKey: 'k', httpClient: $transport, maxRetries: 0));
 
         $this->expectException(ValidationException::class);
@@ -81,37 +74,9 @@ final class Qwen2ClientTest extends TestCase
 
         $client->textToImage->run([
             'model' => 'qwen-2-text-to-image',
-            'prompt' => 'A product render',
-        ]);
+            'prompt' => 'A product render']);
     }
 
-    public function testRejectsInvalidContractEnum(): void
-    {
-        $client = new Qwen2Client(new ClientOptions(apiKey: 'k', httpClient: new QueueHttpClient([]), maxRetries: 0));
 
-        $this->expectException(ValidationException::class);
-        $this->expectExceptionMessage('aspect_ratio must be one of the allowed values');
 
-        $client->textToImage->create([
-        'model' => 'qwen-2-text-to-image',
-        'prompt' => 'A product render',
-        'aspect_ratio' => 'not-valid',
-        ]);
-    }
-
-    public function testSecondaryResourceUsesItsOwnPath(): void
-    {
-        $transport = new QueueHttpClient([
-            new Response(200, [], '{"id":"task_2"}'),
-        ]);
-        $client = new Qwen2Client(new ClientOptions(apiKey: 'k', httpClient: $transport, maxRetries: 0));
-
-        $client->remixImage->create([
-            'model' => 'qwen-2-remix-image',
-            'prompt' => 'A product render',
-            'source_image_url' => 'https://cdn.runapi.ai/public/samples/image.jpg',
-        ]);
-
-        self::assertSame('/api/v1/qwen_2/remix_image', $transport->requests[0]->getUri()->getPath());
-    }
 }

@@ -10,7 +10,6 @@ use RunApi\Core\RequestOptions;
 use RunApi\Core\Resources\TypedConfiguredResource;
 use RunApi\Qwen2\Models\CompletedImageTaskResponse;
 use RunApi\Qwen2\Models\ImageTaskResponse;
-use RunApi\Qwen2\Types;
 
 /**
  * Edits input images according to a natural-language prompt.
@@ -73,10 +72,8 @@ readonly class EditImage extends TypedConfiguredResource
         return new self(
             $http,
             '/api/v1/qwen_2/edit_image',
-            'qwen-2/edit-image',
             ImageTaskResponse::class,
             CompletedImageTaskResponse::class,
-            Types::EDIT_IMAGE_MODELS,
             'edit-image',
             ImageTaskResponse::class,
             CompletedImageTaskResponse::class,

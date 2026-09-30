@@ -7,7 +7,6 @@ namespace RunApi\Qwen2;
 use RunApi\Core\BaseClient;
 use RunApi\Core\ClientOptions;
 use RunApi\Qwen2\Resources\EditImage;
-use RunApi\Qwen2\Resources\RemixImage;
 use RunApi\Qwen2\Resources\TextToImage;
 
 /**
@@ -22,10 +21,6 @@ final class Qwen2Client extends BaseClient
      */
     public readonly TextToImage $textToImage;
     /**
-     * Provides image remix operations.
-     */
-    public readonly RemixImage $remixImage;
-    /**
      * Provides image edit operations.
      */
     public readonly EditImage $editImage;
@@ -37,7 +32,6 @@ final class Qwen2Client extends BaseClient
     {
         parent::__construct($options);
         $this->textToImage = TextToImage::fromHttp($this->http);
-        $this->remixImage = RemixImage::fromHttp($this->http);
         $this->editImage = EditImage::fromHttp($this->http);
     }
 }

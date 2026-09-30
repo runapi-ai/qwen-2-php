@@ -10,7 +10,6 @@ use RunApi\Core\RequestOptions;
 use RunApi\Core\Resources\TypedConfiguredResource;
 use RunApi\Qwen2\Models\CompletedImageTaskResponse;
 use RunApi\Qwen2\Models\ImageTaskResponse;
-use RunApi\Qwen2\Types;
 
 /**
  * Generates images from text prompts.
@@ -71,10 +70,8 @@ readonly class TextToImage extends TypedConfiguredResource
         return new self(
             $http,
             '/api/v1/qwen_2/text_to_image',
-            'qwen-2/text-to-image',
             ImageTaskResponse::class,
             CompletedImageTaskResponse::class,
-            Types::TEXT_TO_IMAGE_MODELS,
             'text-to-image',
             ImageTaskResponse::class,
             CompletedImageTaskResponse::class,
